@@ -1,0 +1,123 @@
+{% extends "apply_model/base.html" %}
+{% block content %}
+    <script>
+    function save(){         
+        val = document.myform.text_area.value; 
+        mydoc = document.open(); 
+        mydoc.write(val); 
+        mydoc.execCommand("saveAs",true,".sav"); 
+        history.go(-1);
+    } 
+    </script>
+
+    <div class="container-fluid">
+        <h1 style="text-align:center; color: white;">Regression Results</h1>
+        <br/>
+        <div class="row well">
+            <div class="col-md-4" id="model_summary">
+                <div id="summary_title" style="text-align:center;">
+                    <h3 style="text-align:center;">Model summary</h3>
+                    <hr/>
+                        You selected 
+                        {% if method == "linear_regression" %} 
+                            <b>Linear Regression</b> 
+                        {% endif %}
+                        {% if method == "decision_tree" %} 
+                            <b>Decision Tree</b> 
+                        {% endif %}
+                        {% if method == "svr" %} 
+                            <b>Support Vector Regression</b> 
+                        {% endif %}
+                        {% if method == "mlp" %} 
+                            <b>Multi-Layer Perceptron</b>
+                        {% endif %}
+                        {% if method == "random_forest" %} 
+                            <b>Random Forest</b>
+                        {% endif %}
+                        and 
+                        {% if approach == "full_training" %}
+                            <b>Full Training</b>.
+                        {% endif %}
+                        {% if approach == "train_test" %}
+                            <b>Training/Testing validation</b>.
+                        {% endif %}
+                        {% if approach == "kfold" %}
+                            <b>KFold validation</b>
+                        {% endif %}
+                        {% if approach == "repeated_kfold" %}
+                            <b>Repeated KFold validation</b>
+                        {% endif %}
+                </div>
+                <div id="model_output" >
+                    <br/>
+                    <br/>
+                    The resulting model is the following:
+                    <br/>
+                    <br/>
+                    {{ model }}
+                </div>                
+            </div>
+            <div class="col-md-4" id="model_statistics_training">
+                <div id="statistics_title">
+                    <h3 style="text-align:center;">Model Statistics</h3>                    
+                    <hr/>
+                    <h5>Training Performance</h5>
+                    <br/>
+                    <table>
+                        <tr>
+                            <td>Mean Absolute Error</td>                            
+                            <td>{{ mae_train }}</td>
+                        </tr>
+                        <tr>
+                            <td>Mean Squared Error</td>                            
+                            <td>{{ mse_train }}</td>
+                        </tr>
+                        <tr>
+                            <td>Explained Variance Score</td>                            
+                            <td>{{ ex_variance_train }}</td>
+                        </tr>
+                        <tr>
+                            <td>R_squared</td>                            
+                            <td>{{ r2_train }}</td>
+                        </tr>
+                    </table>                                        
+                    
+                </div>
+            </div>
+            {% if approach != "full_training" %}
+                <div class="col-md-4" id="model_statistics_testing">
+                    <div id="statistics_title">
+                        <h3 style="text-align:center;">Model Statistics</h3>                    
+                        <hr/>
+                        <h5>Testing Performance</h5>
+                        {% if approach == "kfold" or approach == "repeated_kfold" %}                            
+                            Average scores of all the CV runs
+                        {% endif %}
+                        <br/>
+                        <table>
+                            <tr>
+                                <td>Mean Absolute Error</td>                            
+                                <td>{{ mae_test }}</td>
+                            </tr>
+                            <tr>
+                                <td>Mean Squared Error</td>                            
+                                <td>{{ mse_test }}</td>
+                            </tr>
+                            <tr>
+                                <td>Explained Variance Score</td>                            
+                                <td>{{ ex_variance_test }}</td>
+                            </tr>
+                            <tr>
+                                <td>R_squared</td>                            
+                                <td>{{ r2_test }}</td>
+                            </tr>
+                        </table>                                        
+                        
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+
+{% endblock content %}

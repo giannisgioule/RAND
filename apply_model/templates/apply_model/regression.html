@@ -1,0 +1,360 @@
+{% extends "apply_model/base.html" %}
+{% block content %}
+    <script>
+        function myFunction(){
+            var linear_block=document.getElementById("linear_regression_parameters")
+            var decision_tree_block=document.getElementById("decision_tree_parameters")
+            var mlp_block=document.getElementById("mlp_parameters")
+            var random_forest_block=document.getElementById("random_forest_parameters")
+            var svr_block=document.getElementById("svr_parameters")
+            
+            var sel=document.getElementById("select_method")
+        
+            if(sel.value=="linear_regression"){
+                linear_block.style.display="block";
+            }else{
+                linear_block.style.display="none";
+            }
+
+            if(sel.value=="decision_tree"){
+                decision_tree_block.style.display="block";
+            }else{
+                decision_tree_block.style.display="none";
+            }
+
+            if(sel.value=="mlp"){
+                mlp_block.style.display="block";
+            }else{
+                mlp_block.style.display="none";
+            }
+            
+            if(sel.value=="random_forest"){
+                random_forest_block.style.display="block";
+            }else{
+                random_forest_block.style.display="none";
+            }
+            
+            if(sel.value=="svr"){
+                svr_block.style.display="block";
+            }else{
+                svr_block.style.display="none";
+            }
+        
+        }
+
+        function approachParameters(){            
+            var kfold_parameters=document.getElementById("kfold_approach_parameters")
+            var repeated_kfold_parameters=document.getElementById("repeated_kfold_approach_parameters")
+            var train_test_parameters=document.getElementById("train_test_approach_parameters")
+            var n_splits=document.getElementById("kfold_parameter_n_splits")
+            var seed=document.getElementById("kfold_parameter_seed")                        
+            var n_repeats=document.getElementById("repeated_kfold_parameter_n_repeats")
+            var train_test_seed=document.getElementById("train_test_parameter_parameter_seed")
+            var train_test_train_size=document.getElementById("train_test_parameter_train_size")
+
+            var apr=document.getElementById("select_approach")
+            
+            
+            if(apr.value=="kfold"){  
+                kfold_parameters.style.display="";
+                repeated_kfold_parameters.style.display="none";
+                train_test_parameters.style.display="none";
+            }else if(apr.value=="repeated_kfold"){                
+                kfold_parameters.style.display="";
+                repeated_kfold_parameters.style.display="";
+                train_test_parameters.style.display="none";
+            }else if(apr.value=="train_test"){
+                kfold_parameters.style.display="none";
+                repeated_kfold_parameters.style.display="none";
+                train_test_parameters.style.display="";
+            }else{
+                kfold_parameters.style.display="none";
+                repeated_kfold_parameters.style.display="none";
+                train_test_parameters.style.display="none";
+            }
+
+        }
+    </script>
+
+    <div class="container-fluid">                
+        
+        <form name="regression_form" method="POST" action="/upload/" enctype="multipart/form-data" target="_blank">
+            {% csrf_token %}
+            
+            <div class="row">
+
+                <!--  4 columns wide -->
+                <div class="col-md-4">                    
+                    
+                    <!-- Create a box and include selection options -->
+                    <div class="form-group well">
+                        
+                        <h4 style="text-align: center;">Method selection</h4>
+                        <br/>
+                        Choose a regression method
+                        <select name="regression_method" class="custom-select" style="max-width: 500px" id="select_method" onchange="myFunction()">                            
+                            <option selected value="linear_regression">Linear Regression</option>
+                            <option value="decision_tree">Decision Tree</option>                
+                            <option value="mlp">Multi-Layer Perceptron</option>                
+                            <option value="random_forest">Random Forest</option> 
+                            <option value="svr">Support Vector Regression</option> 
+                        </select>
+                        <br/>
+                        <br/>
+                        <br/>   
+                        Choose a fitting approach
+                        <select name="regression_approach" class="custom-select mb-3" style="max-width: 500px" id="select_approach" onchange="approachParameters()">                            
+                            <option selected value="full_training">Full training</option>
+                            <option value="train_test">Training/Testing validation</option>                
+                            <option value="kfold">KFold validation</option>
+                            <option value="repeated_kfold">Repeated KFold validation</option>
+                        </select>  
+                        
+                        <div id="train_test_approach_parameters" class="row" style="display: none;">                                                                               
+                            <div class="col-6" style="text-align:center;" id="train_test_parameter_train_size" >                                       
+                                train_size
+                                <hr/>                             
+                                <input type="number" name="train_test_train_size" value="0.8" style="max-width: 50px;">                                                        
+                            </div>
+                            <div class="col-6" style="text-align:center" id="train_test_parameter_parameter_seed" >
+                                seed
+                                <hr/>                           
+                                <input type="number text" name="train_test_seed" value="1" style="max-width: 50px;">
+                            </div>                                                   
+                        </div>  
+
+                        <div id="kfold_approach_parameters" class="row" style="display: none;">                                                                               
+                            <div class="col-6" style="text-align:center;" id="kfold_parameter_n_splits" >                                       
+                                n_splits
+                                <hr/>                             
+                                <input type="number" name="kfold_n_splits" value="5" style="max-width: 50px;">                                                        
+                            </div>
+                            <div class="col-6" style="text-align:center" id="kfold_parameter_seed" >
+                                seed
+                                <hr/>                           
+                                <input type="number text" name="kfold_seed" value="1" style="max-width: 50px;">
+                            </div>                                                   
+                        </div>  
+
+                        <br/>
+                        
+                        <div id="repeated_kfold_approach_parameters" class="row" style="display: none;">                            
+                            <div class="col-6" style="text-align: center;" id="repeated_kfold_parameter_n_repeats">
+                                n_repeats
+                                <hr/>
+                                <input type="number" name="repeated_kfold_n_repeats" style="max-width: 50px;" value="5">
+                            </div>                            
+                        </div>                                                             
+                        <br/>
+                        <br/>
+                        <br/>         
+                        <label for="exampleFormControlFile1">Upload a .csv file</label>
+                        <input  style="max-width: 500px" type="file" class="form-control-file" id="exampleFormControlFile1" name="regression_dataset" onchange="myVisuals()">
+                        <br/>
+                        <br/>
+                        <br/>                        
+                        <input type="submit" name= "fitmodel" value="Run"/>                 
+                    </div>
+
+                </div>
+                
+                <div class="col-md-1">
+                </div>
+                
+                <!--  4 columns wide -->
+                <div class="col-md-7">
+
+                    <div class="form-group well">
+                        <h4 style="text-align: center;">Hyperparameter selection</h4>                                                
+                        <br/>                        
+                        <!-------------Linear Regression Parameters---------->
+                        <div id="linear_regression_parameters" style="display: block">
+                            <hr/>
+                            <b>fit_intercept:</b> whether to calculate the intercept for this model. If set
+                            to False, no intercept will be used in calculations.                                                           
+                            <br/>
+                            <select name="linear_fit_intercept" class="custom-select" style="max-width: 250px;">
+                                <option selected value="True">True</option>
+                                <option value="False">False</option>
+                            </select>
+                        </div>
+                        <!--------------------------------------------------->
+
+                        <!-------------Decision Tree Parameters-------------->
+                        <div id="decision_tree_parameters" style="display: none">
+                            <hr/>
+                            <b>criterion:</b> The function to measure the quality of a split.
+                            <br/>
+                            <select name="decision_tree_criterion" class="custom-select" style="max-width: 250px;">
+                                <option selected value="mse">Mean Squared Error</option>
+                                <option value="friedman_mse">MSE with Friedman's score</option>
+                                <option value="mae">Mean Absolute Error</option>
+                            </select>
+                            <hr/>
+                            <b>splitter:</b> The strategy used to choose the split at each node.
+                            <br/>
+                            <select name="decision_tree_splitter" class="custom-select" style="max-width: 250px;">
+                                <option selected value="best">Best split</option>
+                                <option value="random">Random split</option>                                
+                            </select>
+                            <hr/>
+                            <b>max_depth:</b> The maximum depth of the tree. Can take <strong>integer</strong> 
+                            values or <strong>None</strong>. If None, then the nodes are expanded until all leaves
+                            are pure or until all leaves contain less than min_samples_split samples.
+                            <br/>
+                            <input type="text number" name="decision_tree_max_depth" value="None">
+                            <hr/>
+                            <b>min_samples_split:</b> The minimum number of samples required to split an 
+                            internal node. Takes <strong>integer</strong> and/or <strong>float</strong> (decimal) values.                            
+                            <br/>
+                            <input type="number" name="decision_tree_min_samples_split" value="2">
+                            <hr/>
+                            <b>min_samples_leaf:</b> The minimum number of samples required to be at a leaf node. 
+                            Takes <strong>integer</strong> and/or <strong>float</strong> (decimal) values.                            
+                            <br/>
+                            <input type="number" name="decision_tree_min_samples_leaf" value="1">
+                            <hr/>
+                            <b>max_leaf_nodes:</b> Grow a tree with max_leaf_nodes in best-first fashion. Best nodes are 
+                            defined as relative reduction in impurity. If None then unlimited number of leaf nodes.
+                            <br/>
+                            <input type="text number" name="decision_tree_max_leaf_nodes" value="None">
+                        </div>                        
+                        <!--------------------------------------------------->
+
+                        <!------------------MLP Parameters------------------->
+                        <div id="mlp_parameters" style="display: none">
+                            <hr/>
+                            <b>hidden_layer_sizes:</b> The ith element represents the number of
+                            neurons in the ith hidden layer.
+                            <br/>
+                            <input type="number text" name="mlp_hidden_layer_sizes" value="100,">
+                            <hr/>
+                            <b>activation:</b> Activation function for the hidden layer(s).
+                            <br/>
+                            <select name="mlp_activation" class="custom-select" style="max-width: 250px;">
+                                <option selected value="relu">ReLU</option>
+                                <option value="identity">Identity</option>
+                                <option value="logistic">Logistic sigmoid function</option>
+                                <option value="tanh">Hyperbolic tan function</option>                                
+                            </select>
+                            <hr/>
+                            <b>solver:</b> The solver of the optimization.
+                            <br/>
+                            <select name="mlp_solver" class="custom-select" style="max-width: 250px;">
+                                <option selected value="adam">adam: Stochastic gradient-based</option>
+                                <option value="lbfgs">lbfgs</option>
+                                <option value="sgd">sgd: Stochastic gradient descent</option>                                
+                            </select>
+                            <hr/>
+                            <b>alpha:</b> L2 penalty (regularization term) parameter.
+                            <br/>
+                            <input type="number" name="mlp_alpha" value="0.0001">
+                            <hr/>
+                            <b>max_iter:</b> Maximum number of iterations. The solver iterates
+                            until convergence (determing by "tol") or this number of iterations.
+                            <br/>
+                            <input type="number" name="mlp_max_iter" value="200">
+                            <hr/>
+                            <b>tol:</b> Tolerance for the optimization. 
+                            <br/>
+                            <input type="number" name="mlp_tol" value="0.0001">
+                        </div>
+                        <!--------------------------------------------------->
+                        
+                        <!-------------Random Forest Parameters-------------->
+                        <div id="random_forest_parameters" style="display: none">
+                            <hr/>
+                            <b>n_estimators:</b> The number of trees in the forest.
+                            <br/>
+                            <input type="number" name="random_forest_n_estimators" value="100">
+                            <hr/>
+                            <b>criterion:</b> The function to measure the quality of a split.
+                            <br/>
+                            <select name="random_forest_criterion" class="custom-select" style="max-width: 250px;">
+                                <option selected value="mse">Mean Squared Error</option>
+                                <option value="mae">Mean Absolute Error</option>
+                            </select>
+                            <hr/>
+                            <b>max_depth:</b> The maximum depth of the tree. Can take <strong>integer</strong> 
+                            values or <strong>None</strong>. If None, then the nodes are expanded until all leaves
+                            are pure or until all leaves contain less than min_samples_split samples.
+                            <br/>
+                            <input type="text number" name="random_forest_max_depth" value="None">
+                            <hr/>
+                            <b>min_samples_split:</b> The minimum number of samples required to split an 
+                            internal node. Takes <strong>integer</strong> and/or <strong>float</strong> (decimal) values.                            
+                            <br/>
+                            <input type="number" name="random_forest_min_samples_split" value="2">
+                            <hr/>
+                            <b>min_samples_leaf:</b> The minimum number of samples required to be at a leaf node. 
+                            Takes <strong>integer</strong> and/or <strong>float</strong> (decimal) values.                            
+                            <br/>
+                            <input type="number" name="random_forest_min_samples_leaf" value="1">                            
+                            <hr/>
+                            <b>max_features:</b> The number of features to consider when looking for the best
+                            split. Can take <strong>integer</strong> values and some functions.
+                            <ul>
+                                <li>If integer, then consider that number</li>
+                                <li>If <i>auto</i>, then consider all the features</li>
+                                <li>If <i>sqrt</i>, then consider the square root of the provided number ( e.g. sgrt(5) )</li>
+                                <li>If <i>log2</i> then consider the logarithm with base 2 of the provided number ( e.g log2(3) )</li>                                
+                            </ul>
+                            <br/>
+                            <input type="text number" name="random_forest_max_features" value="auto">
+                        </div>                        
+                        <!--------------------------------------------------->
+
+                        <!-------------Support Vector Machines--------------->
+                        <div id="svr_parameters" style="display: none">
+                            <hr/>
+                            <b>kernel:</b> The kernel type to be used in the algorithm.
+                            <br/>
+                            <select name="svr_kernel" class="custom-select" style="max-width: 250px;">
+                                <option selected value="rbf">rbf</option>
+                                <option value="linear">Linear</option>
+                                <option value="poly">Polynomial</option>
+                                <option value="sigmoid">sigmoid</option>
+                            </select>
+                            <hr/>
+                            <b>degree:</b> Degree of the polynomial kernel function only. Ignored by all other kernels.
+                            <br/>
+                            <input type="number" name="svr_degree" value="3">
+                            <hr/>
+                            <b>gamma:</b> Kernel coefficient for <i>rbf</i>, <i>poly</i> and <i>sigmoid</i>.
+                            Ignored by all other kernels. Takes <strong>integer</strong> values
+                            <br/>
+                            <input type="number text" name="svr_gamma" value="auto">
+                            <hr/>
+                            <b>tol:</b> Tolerance for stopping criterion.
+                            <br/>
+                            <input type="number" name="svr_tol" value="0.001">
+                            <hr/>
+                            <b>C:</b> Penalty parameter for C of the error term.
+                            <br/>
+                            <input type="number" name="svr_C" value="1">
+                            <hr/>
+                            <b>epsilon:</b> Epsilon in the epsilon-SVR model. It specifies the 
+                            epsilon-tube within which no penalty is associated in the training loss 
+                            function with points predicted within a distance epsilon from the actual value.
+                            <br/>
+                            <input type="number" name="svr_epsilon" value="0.1">
+                            <hr/>
+                            <b>max_iter:</b> Hard limit on iterations within solver, or -1 for no limit.
+                            <br/>
+                            <input type="number" name="svr_max_iter" value="-1">
+                        </div>
+                        <!--------------------------------------------------->
+
+                    </div>
+                    
+                </div>
+                
+                <!-- <div class="col-md-4">
+                </div> -->
+
+            </div>
+    
+        </form>            
+    </div>
+    
+{% endblock content %}

@@ -1,0 +1,137 @@
+body {
+    /* background-color: #fafafa; */
+    background-color:#8e9eab;
+    font-family:Roboto;
+    color: #333333;  
+    margin-top: 5rem;
+    margin-left:15px;  
+    margin-right:15px;
+}
+
+h1, h2, h3, h4, h5, h6 {  
+    color: #444444;  
+}    
+
+ul {
+    margin: 0;
+}
+
+.container {
+    max-width: 100%;
+}
+
+/*--------------------------------------------------------------------------*/
+/*                            Base Template                                 */
+header.masthead {
+    position: relative;  
+    background-color:#8e9eab;
+    background-size: cover;  
+    font-family:Courier;
+    font-size:50px;
+    font-weight:700;
+    color:white;  
+    margin-right: -15px;
+    margin-left: -15px;
+}
+/*--------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------*/
+/*                                 Home page                                */
+.box{
+	background-color:white;
+	color:black;
+	padding-bottom:5px;
+	margin-left:-15px;
+    margin-right:-15px;    
+}
+
+.box_buttons{
+    font-size:25px;
+    font-family: Roboto;
+}
+
+/*Class for bigger font*/
+.lead{
+	padding-left:0rem;
+	text-align:center;
+}
+
+.middle_icons{
+	text-align: center;
+	padding-bottom:40px
+}
+/*--------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------*/
+/*                            Navigation Bar                                */
+.bg-steel {
+    /* Background color of navbar */
+    background-color: white;    
+}
+
+/* RAND logo options */
+.navbar-dark .navbar-brand {
+    font-size:25px;
+	font-weight: 700;	
+	font-family:Roboto;
+	color:#718093;		
+}
+
+.navbar-dark .navbar-brand:hover {
+	color:black;	
+}
+
+.site-header .navbar-nav .nav-link {
+    font-size:18px;
+    font-weight: 500;
+    font-family:Roboto;
+    color:#718093;	        
+}
+
+.site-header .navbar-nav .nav-link:hover {
+    color:black;	   
+}
+
+.site-header .navbar-nav .nav-link.active {    
+    font-weight: 500;        
+}
+
+.navbar-toggler{
+    background-color:#8e9eab
+}
+/*--------------------------------------------------------------------------*/
+
+
+/*--------------------------------------------------------------------------*/
+/*                            Regression Page                               */
+.form-control-file{    
+    background-color: white;
+}
+
+.well{
+    background-color: white;     
+    min-height: 20px;
+    padding: 19px;
+    margin-bottom: 20px;
+    border: 1px solid #e3e3e3;
+    border-radius:4px;
+    -webkit-box-shadow: insert 0 1px 1px rgba(0,0,0,.05);
+    box-shadow: insert 0px 1px 1px rgba(0,0,0,.05);
+}
+/*--------------------------------------------------------------------------*/
+
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+  }
+  
+  td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+  }
+  
+  tr:nth-child(even) {
+    background-color: #dddddd;
+  }
