@@ -63,7 +63,7 @@ class BackendRegression():
         def validate_model(X,y,method,approach,approach_parameters):
             
             if approach=="train_test":
-                X_train,X_test,y_train,y_test=train_test_split(X,y,shuffle=True,**approach_parameters)                                    
+                X_train,X_test,y_train,y_test=train_test_split(X,y,**approach_parameters)                                    
                 return X_train,X_test,y_train,y_test
             if approach=="kfold":
                 kf=KFold(**approach_parameters)

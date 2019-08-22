@@ -107,8 +107,7 @@ def upload(request):
             approach_parameters={
                 "n_splits":int(request.POST.get("kfold_n_splits")),
                 "random_state":int(request.POST.get("kfold_seed")),
-                "n_repeats":int(request.POST.get("repeated_kfold_n_repeats")),
-                "shuffle":True
+                "n_repeats":int(request.POST.get("repeated_kfold_n_repeats")),                
             }
 
         my_context={
