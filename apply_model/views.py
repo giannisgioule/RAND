@@ -88,6 +88,13 @@ def upload(request):
             
             if (hyperparameters["gamma"].isdigit() is True):
                 hyperparameters["gamma"]=int(hyperparameters["gamma"])
+            
+        elif method=="pwr":
+            hyperparameters={
+                "method":request.POST.get("pwr_method"),
+                "n_regions":int(request.POST.get("pwr_n_regions"))
+            }
+            print(hyperparameters)
         
         if approach=="full_training":
             approach_parameters={None:None}
@@ -107,8 +114,7 @@ def upload(request):
             approach_parameters={
                 "n_splits":int(request.POST.get("kfold_n_splits")),
                 "random_state":int(request.POST.get("kfold_seed")),
-                "n_repeats":int(request.POST.get("repeated_kfold_n_repeats")),
-                "shuffle":True
+                "n_repeats":int(request.POST.get("repeated_kfold_n_repeats"))                
             }
 
         my_context={
@@ -118,7 +124,7 @@ def upload(request):
             "hyperparameters":hyperparameters,
             "approach_parameters":approach_parameters
         }                    
-
+                
         model=BackendRegression(my_context)
         model.backend()
 

@@ -7,6 +7,7 @@
             var mlp_block=document.getElementById("mlp_parameters")
             var random_forest_block=document.getElementById("random_forest_parameters")
             var svr_block=document.getElementById("svr_parameters")
+            var pwr_block=document.getElementById("pwr_parameters")
             
             var sel=document.getElementById("select_method")
         
@@ -38,6 +39,12 @@
                 svr_block.style.display="block";
             }else{
                 svr_block.style.display="none";
+            }
+
+            if(sel.value=="pwr"){
+                pwr_block.style.display="block";
+            }else{
+                pwr_block.style.display="none";
             }
         
         }
@@ -97,7 +104,8 @@
                             <option value="decision_tree">Decision Tree</option>                
                             <option value="mlp">Multi-Layer Perceptron</option>                
                             <option value="random_forest">Random Forest</option> 
-                            <option value="svr">Support Vector Regression</option> 
+                            <option value="svr">Support Vector Regression</option>                             
+                            <option value="pwr">Piecewise Regression</option>
                         </select>
                         <br/>
                         <br/>
@@ -321,7 +329,7 @@
                             <input type="number" name="svr_degree" value="3">
                             <hr/>
                             <b>gamma:</b> Kernel coefficient for <i>rbf</i>, <i>poly</i> and <i>sigmoid</i>.
-                            Ignored by all other kernels. Takes <strong>integer</strong> values
+                            Ignored by all other kernels. Takes <strong>integer</strong> values.
                             <br/>
                             <input type="number text" name="svr_gamma" value="auto">
                             <hr/>
@@ -342,6 +350,26 @@
                             <b>max_iter:</b> Hard limit on iterations within solver, or -1 for no limit.
                             <br/>
                             <input type="number" name="svr_max_iter" value="-1">
+                        </div>
+                        <!--------------------------------------------------->
+
+                        <!---------------Piecewise Regression---------------->
+                        <div id="pwr_parameters" style="display: none;">
+                            <hr/>
+                            <b>method:</b> The selected piecewise approach.
+                            <br/>
+                            <select name="pwr_method" class="custom-select" style="max-width: 250px;">
+                                <option selected value="PROA">PROA</option>
+                                <option value="PRIA">PRIA</option>
+                                <option value="PROB">PROB</option>
+                                <option value="PRIB">PRIB</option>
+                                <option value="OPLRA">OPLRA</option>
+                            </select>
+                            <hr/>
+                            <b>n_regions:</b> The maximum number of allowable regions.
+                            This applies only to <i>PROA</i> and <i>PROB</i> and is ignored by other methods.
+                            <br/>
+                            <input type="number" name="pwr_n_regions" value="2">
                         </div>
                         <!--------------------------------------------------->
 

@@ -1,0 +1,271 @@
+[PROJECT]
+
+[RP:AWKQAP]
+1=
+
+[RP:BCHTSP]
+1=
+
+[RP:GQAPSDP]
+1=
+
+[RP:QMEANVAG]
+1=
+
+[RP:UNTITLED_1]
+1=
+
+[RP:ZACHARY_M123]
+1=
+
+[RP:MIQCP_TEST]
+1=
+
+[GDXDISP: part Par 0]
+PlaneDim=0
+RowDim=0
+Squeeze=1
+SqTrail0=0
+Order=
+Decim=7
+PlaneRownr=-1
+
+[GDXDISP: part2 Par 0]
+PlaneDim=0
+RowDim=0
+Squeeze=1
+SqTrail0=0
+Order=
+Decim=7
+PlaneRownr=-1
+
+[GDXDISP: coef Par 2]
+PlaneDim=0
+RowDim=2
+Squeeze=1
+SqTrail0=0
+Order=1,2
+Decim=7
+PlaneRownr=-1
+
+[GDXDISP: point Par 2]
+PlaneDim=0
+RowDim=2
+Squeeze=1
+SqTrail0=0
+Order=1,2
+Decim=7
+PlaneRownr=-1
+
+[RP:BIPARTITIONING]
+1=
+
+[OPENWINDOW_1]
+MAXIM=0
+TOP=96
+LEFT=242
+HEIGHT=853
+WIDTH=1443
+
+[RP:CW1_APE_LPCRUDEUNIT]
+1=
+
+[RP:LINEAR_FIT]
+1=
+
+[RP:AGRESTE]
+1=
+
+[GDXDISP: A Par 2]
+PlaneDim=0
+RowDim=1
+Squeeze=1
+SqTrail0=0
+Order=1,2
+Decim=7
+PlaneRownr=-1
+
+[GDXDISP: m Set 1]
+PlaneDim=0
+RowDim=1
+Squeeze=1
+SqTrail0=0
+Order=1
+Decim=7
+PlaneRownr=-1
+
+[GDXDISP: met Par 1]
+PlaneDim=0
+RowDim=1
+Squeeze=1
+SqTrail0=0
+Order=1
+Decim=7
+PlaneRownr=-1
+
+[GDXDISP: reg Set 1]
+PlaneDim=0
+RowDim=1
+Squeeze=1
+SqTrail0=0
+Order=1
+Decim=7
+PlaneRownr=-1
+
+[GDXDISP: s Set 1]
+PlaneDim=0
+RowDim=1
+Squeeze=1
+SqTrail0=0
+Order=1
+Decim=7
+PlaneRownr=-1
+
+[GDXDISP: Y Set 1]
+PlaneDim=0
+RowDim=1
+Squeeze=1
+SqTrail0=0
+Order=1
+Decim=7
+PlaneRownr=-1
+
+[GDXDISP: Y Par 1]
+PlaneDim=0
+RowDim=1
+Squeeze=1
+SqTrail0=0
+Order=1
+Decim=7
+PlaneRownr=-1
+
+[GDXDISP: reg Par 1]
+PlaneDim=0
+RowDim=1
+Squeeze=1
+SqTrail0=0
+Order=1
+Decim=7
+PlaneRownr=-1
+
+[GDXDISP: reg Par 0]
+PlaneDim=0
+RowDim=0
+Squeeze=1
+SqTrail0=0
+Order=
+Decim=7
+PlaneRownr=-1
+
+[GDXDISP: met Par 0]
+PlaneDim=0
+RowDim=0
+Squeeze=1
+SqTrail0=0
+Order=
+Decim=7
+PlaneRownr=-1
+
+[GDXDISP: m1 Set 1]
+PlaneDim=0
+RowDim=1
+Squeeze=1
+SqTrail0=0
+Order=1
+Decim=7
+PlaneRownr=-1
+
+[GDXDISP: p Par 0]
+PlaneDim=0
+RowDim=0
+Squeeze=1
+SqTrail0=0
+Order=
+Decim=7
+PlaneRownr=-1
+
+[RP:UNIFIED]
+1=
+
+[RP:CORRECT_PART]
+1=
+
+[GDXDISP: part_variable Set 1]
+PlaneDim=0
+RowDim=1
+Squeeze=1
+SqTrail0=0
+Order=1
+Decim=7
+PlaneRownr=-1
+
+[GDXDISP: max_error Par 0]
+PlaneDim=0
+RowDim=0
+Squeeze=1
+SqTrail0=0
+Order=
+Decim=7
+PlaneRownr=-1
+
+[GDXDISP: selected_regions Par 0]
+PlaneDim=0
+RowDim=0
+Squeeze=1
+SqTrail0=0
+Order=
+Decim=7
+PlaneRownr=-1
+
+[GDXDISP: selected_method Par 0]
+PlaneDim=0
+RowDim=0
+Squeeze=1
+SqTrail0=0
+Order=
+Decim=7
+PlaneRownr=-1
+
+[GDXDISP: coefficients Par 2]
+PlaneDim=0
+RowDim=1
+Squeeze=1
+SqTrail0=0
+Order=1,2
+Decim=7
+PlaneRownr=-1
+
+[GDXDISP: break_point Par 2]
+PlaneDim=0
+RowDim=2
+Squeeze=1
+SqTrail0=0
+Order=1,2
+Decim=7
+PlaneRownr=-1
+
+[GDXDISP: optimality_gap Par 0]
+PlaneDim=0
+RowDim=0
+Squeeze=1
+SqTrail0=0
+Order=
+Decim=7
+PlaneRownr=-1
+
+[RP:IDENTIFY_PARTITIONING_VARIABLE]
+1=
+
+[RP:OPTIMAL_PIECEWISE_REGRESSION]
+1=
+
+[MRUFILES]
+1=C:\Users\Ioannis\OneDrive - University College London\Current_projects\Piecewise_Regression\input.gdx
+2=C:\Users\Ioannis\OneDrive - University College London\Current_projects\Piecewise_Regression\optimal_piecewise_regression.gms
+3=C:\Users\Ioannis\OneDrive - University College London\Current_projects\Piecewise_Regression\optimal_piecewise_regression.lst
+4=C:\Users\Ioannis\OneDrive - University College London\Current_projects\Piecewise_Regression\identify_partitioning_variable.gms
+5=C:\Users\Ioannis\OneDrive - University College London\Current_projects\Piecewise_Regression\identify_partitioning_variable.lst
+6=C:\Users\Ioannis\OneDrive - University College London\Current_projects\Piecewise_Regression\regression_results.gdx
+7=C:\Users\Ioannis\OneDrive - University College London\Current_projects\Piecewise_Regression\correct_part.gms
+8=C:\Users\Ioannis\OneDrive - University College London\Current_projects\Piecewise_Regression\unified.lst
+9=C:\Users\Ioannis\OneDrive - University College London\Current_projects\Piecewise_Regression\unified.gms

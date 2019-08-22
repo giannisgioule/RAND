@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+import os
 
 from sklearn.preprocessing import MinMaxScaler
 
@@ -17,6 +18,8 @@ from sklearn.linear_model import LinearRegression
 from sklearn.tree import DecisionTreeRegressor
 from sklearn.neural_network import MLPRegressor
 from sklearn.ensemble import RandomForestRegressor
+
+from piecewise_regression_analysis import PiecewiseRegression
 
 # The backend for regression methods.
 class BackendRegression():
@@ -55,6 +58,8 @@ class BackendRegression():
                 model=RandomForestRegressor(**hyperparameters)                                
             elif method=="svr":
                 model=svm.SVR(**hyperparameters)                                    
+            elif method=="pwr":
+                model=PiecewiseRegression(**hyperparameters)                                    
 
             model.fit(X,y)            
             
@@ -63,7 +68,7 @@ class BackendRegression():
         def validate_model(X,y,method,approach,approach_parameters):
             
             if approach=="train_test":
-                X_train,X_test,y_train,y_test=train_test_split(X,y,shuffle=True,**approach_parameters)                                    
+                X_train,X_test,y_train,y_test=train_test_split(X,y,**approach_parameters)                                    
                 return X_train,X_test,y_train,y_test
             if approach=="kfold":
                 kf=KFold(**approach_parameters)
