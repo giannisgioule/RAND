@@ -2,6 +2,8 @@ import pandas as pd
 import numpy as np
 import joblib
 
+import os
+
 from sklearn.preprocessing import MinMaxScaler
 
 from sklearn.model_selection import train_test_split
@@ -153,3 +155,25 @@ class BackendRegression():
         self.metrics_training=metrics_training
         
         return self
+
+    def predict(self):
+        
+        model=self.context["model"]
+        dataset=self.context["dataset"]
+        
+        def read_file(input_data):
+            data=pd.read_csv(input_data)
+            number_predictors=data.shape[1]            
+            X=data.iloc[:,0:number_predictors]            
+
+            return X
+        
+        X=read_file(dataset)
+        y_pred=model.predict(X)                               
+        if os.path.exists("apply_model/static/apply_model/predictions.csv"):
+            os.remove("apply_model/static/apply_model/predictions.csv")
+        text_file=open("apply_model/static/apply_model/predictions.csv","w+")
+        [text_file.write("{}\n".format(round(x,3))) for x in y_pred]
+
+        self.predictions=y_pred
+        return self            

@@ -17,12 +17,10 @@ def upload(request):
     
     if request.method=='POST':
         uploaded_file=request.FILES['regression_dataset']                                 
-
-        global uploaded_filename
-        uploaded_filename=uploaded_file.name
-        uploaded_filename=uploaded_filename.split(".csv")[0]        
         
-        global method
+        uploaded_filename=uploaded_file.name
+        uploaded_filename=uploaded_filename.split(".csv")[0]                
+        
         method=request.POST.get('regression_method')
         approach=request.POST.get('regression_approach')
 
@@ -124,8 +122,7 @@ def upload(request):
             "hyperparameters":hyperparameters,
             "approach_parameters":approach_parameters
         }                    
-
-        global model
+        
         model=BackendRegression(my_context)
         model.backend()
         
@@ -149,3 +146,30 @@ def upload(request):
         
 def visuals(request):
     pass
+
+def predict(request):            
+    return render(request,'apply_model/predict.html')
+
+def predict_upload(request):
+    if request.method=='POST':
+        uploaded_file=request.FILES['prediction_dataset'] 
+        uploaded_model=request.FILES['prediction_model']
+                                
+        model=joblib.load(uploaded_model)  
+        
+        my_context={
+            "model":model,
+            "dataset":uploaded_file,               
+        }         
+
+        y_pred=BackendRegression(my_context)
+        y_pred.predict()        
+
+        my_context={
+            "predictions":y_pred.predictions
+        }
+
+    return render(request,'apply_model/predict_upload.html',my_context)
+
+    # pass
+    

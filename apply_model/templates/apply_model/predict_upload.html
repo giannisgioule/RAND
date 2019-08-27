@@ -1,0 +1,23 @@
+{% extends "apply_model/base.html" %}
+{% block content %}
+{% load static %}
+
+    <div class="row">
+
+        <!--  4 columns wide -->
+        <div class="col-md-4">                    
+
+            <div class="form-group well">
+                <h4 style="text-align: center;">Predictions</h4>
+                {% for values in predictions %}
+                    {{ values }} <br/>
+                {% endfor %}
+            </div>
+
+        </div>
+        <div class="col-md-4">
+            <a href="{% static 'apply_model/predictions.csv' %}" id="save_model_btn" download>Download Predictions</a>                
+        </div>
+
+    </div>
+{% endblock content %}
