@@ -1,7 +1,9 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.core.files.storage import FileSystemStorage
-from .backend import BackendRegression, ModelSave
+from .backend import BackendRegression
+import os
+import joblib
 
 
 # Create your views here.
@@ -126,6 +128,10 @@ def upload(request):
         global model
         model=BackendRegression(my_context)
         model.backend()
+        
+        if os.path.exists("apply_model/static/apply_model/model.sav"):
+            os.remove("apply_model/static/apply_model/model.sav")
+        joblib.dump(model.model,"apply_model/static/apply_model/model.sav")
 
         my_context.update({"model":model.model})        
         my_context.update({"mae_train":model.metrics_training["mae"]})        
@@ -143,14 +149,3 @@ def upload(request):
         
 def visuals(request):
     pass
-
-def save_model(request):                    
-    
-    saving=ModelSave(model.model,uploaded_filename,method)
-    saving.save_file()
-
-    my_context={
-        "saved":saving.saved
-    }
-    
-    return render(request,'apply_model/save.html',my_context)

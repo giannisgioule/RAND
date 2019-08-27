@@ -1,8 +1,5 @@
 import pandas as pd
 import numpy as np
-
-from tkinter import filedialog
-from tkinter import *
 import joblib
 
 from sklearn.preprocessing import MinMaxScaler
@@ -156,32 +153,3 @@ class BackendRegression():
         self.metrics_training=metrics_training
         
         return self
-        
-class ModelSave():
-
-    def __init__(self,model,uploaded_filename,method):
-        self.model=model
-        self.uploaded_filename=uploaded_filename
-        self.method=method
-    
-    def save_file(self):
-        
-        def tkin_job_save(uploaded_filename,method):
-            root=Tk()
-            root.filename=filedialog.asksaveasfilename(\
-            initialdir ="/",\
-            title ="Save file",\
-            defaultextension =".sav",\
-            filetypes= [('sav files', '.sav'),('All files', '.*')],\
-            initialfile=uploaded_filename+"_"+method)
-            root.destroy()
-            
-            return root
-        
-        
-        root = tkin_job_save(self.uploaded_filename,self.method)            
-        if root.filename!="":
-            joblib.dump(self.model,root.filename)
-            self.saved="True"
-        else:
-            self.saved="False"

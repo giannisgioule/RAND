@@ -57,12 +57,9 @@
                     <br/>
                     {{ model }}
                 </div>                
-                
-                <form name="save_model_form" method="POST" action="/upload/save/" enctype="multipart/form-data" target="_blank">
-                    {% csrf_token %}    
-                    <br/>                                    
-                    <input type="submit" name="save_model" value="save model" id="save_model_btn">
-                </form>
+
+                <br/>
+                <a href="{% static 'apply_model/model.sav' %}" id="save_model_btn" download>Save model</a>                
 
 
             </div>
