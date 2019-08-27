@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.core.files.storage import FileSystemStorage
-from .backend import BackendRegression
+from .backend import BackendRegression, ModelSave
 
 
 # Create your views here.
@@ -15,7 +15,12 @@ def upload(request):
     
     if request.method=='POST':
         uploaded_file=request.FILES['regression_dataset']                                 
+
+        global uploaded_filename
+        uploaded_filename=uploaded_file.name
+        uploaded_filename=uploaded_filename.split(".csv")[0]        
         
+        global method
         method=request.POST.get('regression_method')
         approach=request.POST.get('regression_approach')
 
@@ -118,6 +123,7 @@ def upload(request):
             "approach_parameters":approach_parameters
         }                    
 
+        global model
         model=BackendRegression(my_context)
         model.backend()
 
@@ -137,3 +143,14 @@ def upload(request):
         
 def visuals(request):
     pass
+
+def save_model(request):                    
+    
+    saving=ModelSave(model.model,uploaded_filename,method)
+    saving.save_file()
+
+    my_context={
+        "saved":saving.saved
+    }
+    
+    return render(request,'apply_model/save.html',my_context)

@@ -7,4 +7,5 @@ urlpatterns = [
     path('', views.home,name='apply_model-home'),
     path('regression/', views.regression,name='apply_model-regression'),
     path('upload/', views.upload,name='apply_model-upload'),
+    path('upload/save/', views.save_model,name='save_model-save'),
 ]

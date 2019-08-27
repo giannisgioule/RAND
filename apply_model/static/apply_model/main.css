@@ -135,3 +135,16 @@ table {
   tr:nth-child(even) {
     background-color: #dddddd;
   }
+
+  #save_model_btn{
+    background-color: #8e9eab;
+    border: none;
+    color: white;
+    padding: 12px 30px;
+    cursor: pointer;
+    font-size: 20px;
+  }
+
+  #save_model_btn:hover {
+    background-color: RoyalBlue;
+  }
