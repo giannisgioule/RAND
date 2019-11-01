@@ -59,10 +59,11 @@
                 </div>                
 
                 <br/>
-                <a href="{% static 'apply_model/model.sav' %}" id="save_model_btn" download>Save model</a>                
-
-
+                <a href="../{{model_path}}" id="save_model_btn" download>Download model</a>                
+                <br>
+                <br>
             </div>
+
             <div class="col-md-4" id="model_statistics_training">
                 <div id="statistics_title">
                     <h3 style="text-align:center;">Model Statistics</h3>                    
@@ -122,7 +123,11 @@
                     </div>
                 </div>
             {% endif %}
-        </div>
+        </div>        
+        <br/>        
+        {% if user.is_authenticated %}
+            <a href="{% url 'apply_model-model_uploaded' %}" id="save_model_btn">HERE</a>                
+        {% endif %}
     </div>
 
 

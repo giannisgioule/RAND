@@ -6,14 +6,9 @@ import os
 
 from sklearn.preprocessing import MinMaxScaler
 
-from sklearn.model_selection import train_test_split
-from sklearn.model_selection import RepeatedKFold
-from sklearn.model_selection import KFold
+from sklearn.model_selection import train_test_split, RepeatedKFold, KFold, GridSearchCV
 
-from sklearn.metrics import mean_absolute_error
-from sklearn.metrics import mean_squared_error
-from sklearn.metrics import r2_score
-from sklearn.metrics import explained_variance_score
+from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score, explained_variance_score
 
 from sklearn import svm
 from sklearn.linear_model import LinearRegression
@@ -46,18 +41,31 @@ class BackendRegression():
 
             return X,y
 
-        def train_model(X,y,method,hyperparameters):                                
-
-            if method=="linear_regression":
-                model=LinearRegression(**hyperparameters)                            
-            elif method=="decision_tree":
-                model=DecisionTreeRegressor(**hyperparameters)                        
-            elif method=="mlp":
-                model=MLPRegressor(**hyperparameters)                                    
-            elif method=="random_forest":
-                model=RandomForestRegressor(**hyperparameters)                                
-            elif method=="svr":
-                model=svm.SVR(**hyperparameters)                                    
+        def train_model(X,y,method,hyperparameters,cv_object):                                
+            if(self.context["approach"]!="grid_search"):
+                if method=="linear_regression":
+                    model=LinearRegression(**hyperparameters)                            
+                elif method=="decision_tree":
+                    model=DecisionTreeRegressor(**hyperparameters)                        
+                elif method=="mlp":
+                    model=MLPRegressor(**hyperparameters)                                    
+                elif method=="random_forest":
+                    model=RandomForestRegressor(**hyperparameters)                                
+                elif method=="svr":
+                    model=svm.SVR(**hyperparameters)  
+            else:
+                if method=="linear_regression":
+                    selected_estimator=LinearRegression()                            
+                elif method=="decision_tree":
+                    selected_estimator=DecisionTreeRegressor()                        
+                elif method=="mlp":
+                    selected_estimator=MLPRegressor()                                    
+                elif method=="random_forest":
+                    selected_estimator=RandomForestRegressor()                                
+                elif method=="svr":
+                    selected_estimator=svm.SVR()  
+                
+                model=GridSearchCV(estimator=selected_estimator,param_grid=hyperparameters,cv=cv_object)
 
             model.fit(X,y)            
             
@@ -72,7 +80,15 @@ class BackendRegression():
                 kf=KFold(**approach_parameters)
                 index_list=kf.split(X)
                 return index_list
-        
+            if approach=="repeated_kfold":
+                rkf=RepeatedKFold(**approach_parameters)
+                index_list=rkf.split(X)
+                return index_list
+            if approach == "grid_search":
+                X_train,X_test,y_train,y_test=train_test_split(X,y,**approach_parameters)
+                cv_object=KFold(**self.context["approach_parameters_kfold"])
+                return X_train,X_test,y_train,y_test,cv_object
+
         def calculate_metrics(y_true,y_pred):
             
             metrics={
@@ -91,7 +107,7 @@ class BackendRegression():
         X,y=read_file(dataset)
 
         if approach=="full_training":
-            model=train_model(X,y,method,hyperparameters)  
+            model=train_model(X,y,method,hyperparameters,None)  
 
             y_pred=model.predict(X)
             metrics_training=calculate_metrics(y,y_pred)
@@ -101,7 +117,7 @@ class BackendRegression():
             X_train,X_test,y_train,y_test=validate_model(X,y,method,approach,\
                 approach_parameters)            
 
-            model=train_model(X_train,y_train,method,hyperparameters)
+            model=train_model(X_train,y_train,method,hyperparameters,None)
             y_pred=model.predict(X_test)
             y_pred_train=model.predict(X_train)
 
@@ -110,7 +126,7 @@ class BackendRegression():
             
             self.metrics_testing=metrics_testing                
         
-        elif approach=="kfold":
+        elif approach=="kfold" or approach=="repeated_kfold":
             
             index_list=validate_model(X,None,method,approach,\
                 approach_parameters)
@@ -122,7 +138,7 @@ class BackendRegression():
                 X_train, X_test = X.loc[train_index], X.loc[test_index]
                 y_train, y_test = y.loc[train_index], y.loc[test_index]
 
-                model=train_model(X_train,y_train,method,hyperparameters)
+                model=train_model(X_train,y_train,method,hyperparameters,None)
                 y_pred=model.predict(X_test)
                 y_pred_train=model.predict(X_train)
                 
@@ -149,9 +165,25 @@ class BackendRegression():
                 "r2":metrics_testing[3]
                 }
 
-            self.metrics_testing=metrics_testing                
+            self.metrics_testing=metrics_testing   
+        elif approach == "grid_search":
+            X_train,X_test,y_train,y_test,cv_object=validate_model(X,y,method,approach,approach_parameters)
 
-        self.model=model
+            model=train_model(X_train,y_train,method,hyperparameters,cv_object)
+            
+            y_pred=model.predict(X_test)
+            y_pred_train=model.predict(X_train)
+
+            metrics_training=calculate_metrics(y_train,y_pred_train)
+            metrics_testing=calculate_metrics(y_test,y_pred)
+            
+            self.metrics_testing=metrics_testing            
+
+
+        if(approach!="grid_search"):
+            self.model=model
+        else:
+            self.model=model.best_estimator_
         self.metrics_training=metrics_training
         
         return self

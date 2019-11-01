@@ -1,119 +1,50 @@
-from django.shortcuts import render
-from django.http import HttpResponse
-from django.core.files.storage import FileSystemStorage
-from .backend import BackendRegression
 import os
 import joblib
+import pandas as pd
+import numpy as np
+from django.shortcuts import render, redirect
+from django.http import HttpResponse
+from .backend import BackendRegression
+from django.core.files import File
+from .post_options import PostOptions
 
 
 # Create your views here.
-def home(request):    
+def home(request):        
     return render(request,'apply_model/home.html')
 
 def regression(request):
     return render(request,'apply_model/regression.html')
 
-def upload(request):
-    
-    if request.method=='POST':
-        uploaded_file=request.FILES['regression_dataset']                                 
+def upload(request):    
+
+    if request.method=='POST':        
+        uploaded_file=request.FILES['regression_dataset']                     
         
         uploaded_filename=uploaded_file.name
         uploaded_filename=uploaded_filename.split(".csv")[0]                
         
         method=request.POST.get('regression_method')
         approach=request.POST.get('regression_approach')
-
-        if method=="linear_regression":
-            hyperparameters={
-                "fit_intercept":request.POST.get("linear_fit_intercept")                
-            }
-        elif method=="decision_tree":
-            hyperparameters={
-                "criterion":request.POST.get("decision_tree_criterion"),
-                "splitter":request.POST.get("decision_tree_splitter"),
-                "max_depth":request.POST.get("decision_tree_max_depth"),
-                "min_samples_split":int(request.POST.get("decision_tree_min_samples_split")),
-                "min_samples_leaf":int(request.POST.get("decision_tree_min_samples_leaf")),
-                "max_leaf_nodes":request.POST.get("decision_tree_max_leaf_nodes")
-            }
-            if(hyperparameters["max_depth"]=="None"):
-                hyperparameters["max_depth"]=None
-            else:
-                hyperparameters["max_depth"]=int(hyperparameters["max_depth"])
-            if(hyperparameters["max_leaf_nodes"]=="None"):
-                hyperparameters["max_leaf_nodes"]=None
-            else:
-                hyperparameters["max_leaf_nodes"]=int(hyperparameters["max_leaf_nodes"])
-        elif method=="mlp":
-            hyperparameters={
-                "hidden_layer_sizes":request.POST.get("mlp_hidden_layer_sizes"),
-                "activation":request.POST.get("mlp_activation"),
-                "solver":request.POST.get("mlp_solver"),
-                "alpha":float(request.POST.get("mlp_alpha")),
-                "max_iter":int(request.POST.get("mlp_max_iter")),
-                "tol":float(request.POST.get("mlp_tol"))
-            }
-
-            hidden_layers=hyperparameters["hidden_layer_sizes"]            
-            hidden_layers=hidden_layers.split(",")            
-            hidden_layers=tuple(hidden_layers)
-            hidden_layers=tuple(int(x) if x.isdigit() else x for x in\
-                 hidden_layers if x)
-            
-            hyperparameters["hidden_layer_sizes"]=hidden_layers
-            
-        elif method=="random_forest":
-            hyperparameters={
-                "n_estimators":int(request.POST.get("random_forest_n_estimators")),
-                "criterion":request.POST.get("random_forest_criterion"),
-                "max_depth":request.POST.get("random_forest_max_depth"),
-                "min_samples_split":int(request.POST.get("random_forest_min_samples_split")),
-                "min_samples_leaf":int(request.POST.get("random_forest_min_samples_leaf")),
-                "max_features":request.POST.get("random_forest_max_features")
-            }
-
-            if(hyperparameters["max_depth"]=="None"):
-                hyperparameters["max_depth"]=None
-            else:
-                hyperparameters["max_depth"]=int(hyperparameters["max_depth"])
-
-            if(hyperparameters["max_features"].isdigit() is True):
-                hyperparameters["max_features"]=int(hyperparameters["max_features"])
-        elif method=="svr":
-            hyperparameters={
-                "kernel":request.POST.get("svr_kernel"),
-                "degree":int(request.POST.get("svr_degree")),
-                "gamma":request.POST.get("svr_gamma"),
-                "tol":float(request.POST.get("svr_tol")),
-                "C":float(request.POST.get("svr_C")),
-                "epsilon":float(request.POST.get("svr_epsilon")),
-                "max_iter":int(request.POST.get("svr_max_iter"))
-            }
-            
-            if (hyperparameters["gamma"].isdigit() is True):
-                hyperparameters["gamma"]=int(hyperparameters["gamma"])
         
-        if approach=="full_training":
-            approach_parameters={None:None}
-        elif approach=="train_test":
-            approach_parameters={
-                "train_size":float(request.POST.get("train_test_train_size")),
-                "random_state":int(request.POST.get("train_test_seed")),
-                "shuffle":True
-            }
-        elif approach=="kfold":
-            approach_parameters={
-                "n_splits":int(request.POST.get("kfold_n_splits")),
-                "random_state":int(request.POST.get("kfold_seed")),
-                "shuffle":True
-            }
-        elif approach=="repeated_kfold":
-            approach_parameters={
-                "n_splits":int(request.POST.get("kfold_n_splits")),
-                "random_state":int(request.POST.get("kfold_seed")),
-                "n_repeats":int(request.POST.get("repeated_kfold_n_repeats")),                
-            }
+        post_request=PostOptions(approach)
+
+        if method=="linear_regression":            
+            hyperparameters=post_request.linear_regression(request)
+                         
+        elif method=="decision_tree":                        
+            hyperparameters=post_request.decision_tree(request)            
+                                                      
+        elif method=="mlp":                        
+            hyperparameters=post_request.mlp(request)            
+
+        elif method=="random_forest":                    
+            hyperparameters=post_request.random_forest(request)
+                
+        elif method=="svr":                        
+            hyperparameters=post_request.svr(request)
+        
+        approach_parameters=post_request.regression_approach(request)
 
         my_context={
             "method":request.POST.get('regression_method'),
@@ -122,15 +53,29 @@ def upload(request):
             "hyperparameters":hyperparameters,
             "approach_parameters":approach_parameters
         }                    
+        if approach == "grid_search":
+            my_context.update({"approach_parameters_kfold":{
+                "n_splits":int(request.POST.get("kfold_n_splits")),
+                "random_state":int(request.POST.get("kfold_seed")),
+                "shuffle":True
+            }
+            })
         
         model=BackendRegression(my_context)
         model.backend()
+        model.path="static/apply_model/"+uploaded_filename+'_'+method+'_'+approach+".sav"
         
-        if os.path.exists("apply_model/static/apply_model/model.sav"):
-            os.remove("apply_model/static/apply_model/model.sav")
-        joblib.dump(model.model,"apply_model/static/apply_model/model.sav")
+        global correct_filename,correct_file
 
+        correct_filename = uploaded_filename+'_'+method+'_'+approach        
+        correct_file = model.path
+        
+        # if os.path.exists("apply_model/static/apply_model/model.sav"):
+        #     os.remove("apply_model/static/apply_model/model.sav")
+        joblib.dump(model.model,"apply_model/"+model.path)        
+        
         my_context.update({"model":model.model})        
+        my_context.update({"model_path":model.path})
         my_context.update({"mae_train":model.metrics_training["mae"]})        
         my_context.update({"mse_train":model.metrics_training["mse"]})        
         my_context.update({"ex_variance_train":model.metrics_training["ex_variance"]})        
@@ -140,12 +85,9 @@ def upload(request):
             my_context.update({"mae_test":model.metrics_testing["mae"]})        
             my_context.update({"mse_test":model.metrics_testing["mse"]})        
             my_context.update({"ex_variance_test":model.metrics_testing["ex_variance"]})        
-            my_context.update({"r2_test":model.metrics_testing["r2"]})        
+            my_context.update({"r2_test":model.metrics_testing["r2"]})                                                  
 
-        return render(request,'apply_model/upload.html',my_context)
-        
-def visuals(request):
-    pass
+    return render(request,'apply_model/upload.html',my_context)
 
 def predict(request):            
     return render(request,'apply_model/predict.html')
@@ -169,7 +111,7 @@ def predict_upload(request):
             "predictions":y_pred.predictions
         }
 
-    return render(request,'apply_model/predict_upload.html',my_context)
+    return render(request,'apply_model/predict_upload.html',my_context)        
 
-    # pass
-    
+def cv(request):
+    return render(request, 'apply_model/cv.html')
