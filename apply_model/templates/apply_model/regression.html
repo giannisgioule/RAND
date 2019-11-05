@@ -86,7 +86,7 @@
                         <br/>
                         <br/>
                         <br/>                        
-                        <input type="submit" id="fitmodel" name="fitmodel" value="Run"/>                 
+                        <input type="submit" id="fitmodel" name="fitmodel" value="Run" onclick="myFunction()"/>                                         
                     </div>
 
                 </div>
@@ -255,7 +255,7 @@
                             <!-----Section for the add and remove buttons---->
                             <div class="row">
                                 <div class="col-md-2">
-                                    <button type="button" class="button_add" style="display: none;" id="decision_tree_max_features_button_add" onclick="addElement(this.id)">+</button>
+                                    <button type="button" class="button_add" stylGe="display: none;" id="decision_tree_max_features_button_add" onclick="addElement(this.id)">+</button>
                                 </div>
                                 <div class="col-md-2">
                                     <button type="button" class="button_remove" style="display: none;" id="decision_tree_max_features_button_remove" onclick="removeElement(this.id)">-</button>    
@@ -264,9 +264,9 @@
                             <!----------------------------------------------->
                             <ul>
                                 <li>If integer, then consider that number</li>
-                                <li>If <i>auto</i>, then consider all the features</li>
-                                <li>If <i>sqrt</i>, then consider the square root of the provided number ( e.g. sgrt(5) )</li>
-                                <li>If <i>log2</i> then consider the logarithm with base 2 of the provided number ( e.g log2(3) )</li>                                
+                                <li>If <i>auto</i>, then consider <code>max_features=n_features</code></li>
+                                <li>If <i>sqrt</i>, then consider <code>max_features=sqrt(n_features)</code></li>
+                                <li>If <i>log2</i> then consider <code>max_features=log2(n_features)</code></li>                                
                             </ul>
                             <br/>
                             <input type="text number" name="decision_tree_max_features" id="decision_tree_max_features" value="auto">
@@ -515,9 +515,9 @@
                             <!----------------------------------------------->
                             <ul>
                                 <li>If integer, then consider that number</li>
-                                <li>If <i>auto</i>, then consider all the features</li>
-                                <li>If <i>sqrt</i>, then consider the square root of the provided number ( e.g. sgrt(5) )</li>
-                                <li>If <i>log2</i> then consider the logarithm with base 2 of the provided number ( e.g log2(3) )</li>                                
+                                <li>If <i>auto</i>, then consider <code>max_features=n_features</code></li>
+                                <li>If <i>sqrt</i>, then consider <code>max_features=sqrt(n_features)</code></li>
+                                <li>If <i>log2</i> then consider <code>max_features=log2(n_features)</code></li>                                
                             </ul>
                             <br/>
                             <input type="text number" name="random_forest_max_features" id="random_forest_max_features" value="auto">
